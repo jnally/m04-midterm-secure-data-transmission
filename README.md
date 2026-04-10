@@ -2,61 +2,39 @@
 **Author:** Jeremy Nally  
 **Course:** SDEV245 - Security and Secure Coding  
 
+## Overview
+This is a Secure Data Transmission Simulator App designed to demonstrate the implementation of cryptographic standards. It allows for the secure transmission of both plain text and files of any size by utilizing SHA-256 hashing for verifying integrity and AES-128 symmetric encryption for confidentiality.
 
-Module 4 Midterm: Build a Secure Data Transmission App with Hashing and Encryption
-Due: Mon Apr 13, 2026 11:59pmDue: Mon Apr 13, 2026 11:59pm
-Ungraded, 200 Possible Points
-200 Points Possible
-Attempt
-Attempt 1
+## The CIA Triad
+This solution is built upon the three core pillars of information security:
 
-In Progress
-NEXT UP: Submit Assignment
+### Confidentiality
+Confidentiality protects data from unauthorized disclosure. 
+* **Implementation:** This app uses AES-128 symmetric encryption via the `cryptography.fernet` library in Python. 
+* **Role:** By transforming plaintext into an encrypted format (ciphertext), the data remains unreadable to anyone without the shared secret key in order to ensure private communication across potentially insecure channels.
 
-Unlimited Attempts Allowed
-Get Ready
-Students will build a simple application with user login and role-based access control. This demonstrates the implementation of basic authentication and access restrictions based on role.
+### Integrity
+Integrity ensures that data remains accurate and has not been altered or tampered with during transmission.
+* **Implementation:** I implemented SHA-256 hashing. 
+* **Role:** Before transmission, a hash is generated (it acts like a digital fingerprint). After decryption, the hash is recalculated. Any mismatch between the original and final hash immediately alerts the user that the data's integrity has been compromised.
 
-This assignment will support the following outcomes:
+### Availability
+Availability ensures that authorized users have reliable access to the data and system resources.
+* **Implementation:** The app utilizes streaming files in pieces in order to manage any file size.
+* **Role:** Instead of loading an entire file into memory (RAM), which could cause the program to crash when handling large files, the app processes data in 64KB blocks. This prevents overwhelming system memory and ensures the tool works regardless of file size. The only hardware limitation would be disk space for output files.
 
-1.1 Discuss each point on the CIA triad clarifying the significance of the components
-3.1 Describe how randomness affects cryptographic algorithm strength. 
-4.1 Encrypt a message using a simple substitution cipher
-4.2 Implement a SHA-256 hash to verify file integrity. 
-4.3 Illustrate the process of digital signatures using private/public key pairs.
-Supportive Materials
-To be successful with this assignment, you must complete each of the materials listed on the Learning Materials page. 
+## Entropy and Key Generation
+The strength of the security model depends entirely on the quality of the encryption keys.
 
- 
+### The Role of Entropy
+Entropy is the measure of randomness or unpredictability in a system. In cryptography, high entropy is very important. If a key is predictable (has low entropy), it can be easily cracked via brute-force or dictionary attacks by threat actors.
 
-Complete Your Work
-Instructions:
-In this project, students will create a small application or script that:
+### Key Generation Process
+Keys in this application are generated using `Fernet.generate_key()`.
+* **CSPRNG:** This process relies on the operating system’s Cryptographically Secure Pseudorandom Number Generator (CSPRNG). 
+* **Security:** The OS collects entropy from non-deterministic hardware sources (like thermal noise or microscopic disk-timing variations). This results in a 128-bit key that is statistically indistinguishable from true randomness. This makes it impossible for a threat actor to predict or replicate.
 
-Accepts user input (e.g., a message or file)
-Hashes the input using SHA-256 to ensure integrity
-Encrypts the input using symmetric encryption (e.g., AES)
-Decrypts the content and verifies its integrity via hash comparison
-2. Students must also:
-
-Write a short explanation describing how their solution upholds confidentiality, integrity, and availability
-Explain the role of entropy and key generation in their implementation
-Deliverables:
-Code files (GitHub link)
-
-README (requirements from 2)
-
-(REQUIRED) 1-minute screen recording showing how your script works
-
-Rubric
-To see how you will be assessed with this assignment, review the associated rubric.
-
-If you have any questions about assignment expectations, it is always best to ask early.
-
- 
-
-Submit Your Assignment
-Find the "Choose a submission type" section at the bottom of this assignment page (if this section is not displayed, the submission type has been chosen for you). Choose your submission type from the options listed there.
-Complete the assignment for the chosen Submission Type.
-Click the Submit Assignment button to submit.
-Please see "How do I submit an online assignment?" or contact your instructor if you need assistance.
+## Technical Implementation Details
+* **Length-Prefixed Framing:** Because Fernet adds metadata to every block, encrypted chunks vary in size. To handle this in a stream, I implemented a 4-byte Big-Endian length header before every chunk to tell the decryption logic exactly how many bytes to pull next.
+* **Secure File Handling:** All file writing operations use exclusive creation mode (`xb`) to prevent accidentally overwriting existing files.
+* **User Experience:** The app features input validation that allows the user to cancel out of file name input and return to the main menu at any time by pressing Enter without input.
