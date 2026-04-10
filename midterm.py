@@ -86,7 +86,7 @@ def main():
     keep_going = True
     while keep_going: # present menu and loop until 1 or 2 is not selected
         print('\nModule 4 Midterm: Build a Secure Data Transmission App with Hashing and Encryption')
-        print('Secure Data Transmission App Simulator (with SHA-256 Hashing and AES Encryption)')
+        print('Secure Data Transmission Simulator App (with SHA-256 Hashing and AES Encryption)')
         print('\nOptions:')
         print('1. Input text to transmit')
         print('2. Input file to transmit')
