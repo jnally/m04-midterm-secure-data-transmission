@@ -32,7 +32,7 @@ Entropy is the measure of randomness or unpredictability in a system. In cryptog
 ### Key Generation Process
 Keys in this application are generated using `Fernet.generate_key()`.
 * **CSPRNG:** This process relies on the operating system’s Cryptographically Secure Pseudorandom Number Generator (CSPRNG). 
-* **Security:** The OS collects entropy from non-deterministic hardware sources (like thermal noise or microscopic disk-timing variations). This results in a 128-bit key that is statistically indistinguishable from true randomness. This makes it impossible for a threat actor to predict or replicate.
+* **Security:** The operating system collects entropy from non-deterministic hardware sources (like thermal noise or microscopic disk-timing variations). This results in a 128-bit key that is statistically indistinguishable from true randomness. This makes it impossible for a threat actor to predict or replicate.
 
 ## Technical Implementation Details
 * **Length-Prefixed Framing:** Because Fernet adds metadata to every block, encrypted chunks vary in size. To handle this in a stream, I implemented a 4-byte Big-Endian length header before every chunk to tell the decryption logic exactly how many bytes to pull next.
