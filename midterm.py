@@ -116,7 +116,8 @@ def main():
                 decrypted_text_hash = make_text_hash(decrypted_text)
                 print('\nDecrypted Text SHA-256 Hash:', decrypted_text_hash)
                 
-                print('Check if original text hash (', text_input_hash, ') matches decrypted text hash (', decrypted_text_hash, ')...\n')
+                print('\nCheck if original text hash (', text_input_hash, ')')
+                print('matches decrypted text hash (', decrypted_text_hash, ')...\n')
                 if text_input_hash == decrypted_text_hash:
                     print('The hashes match! Message integrity verified.')
                 else:
@@ -167,7 +168,8 @@ def main():
                 dec_file_hash = make_file_hash(dec_file_input)
                 print('\nDecrypted File SHA-256 Hash:', dec_file_hash)
                 
-                print('Check if original file hash (', raw_file_hash, ') matches decrypted file hash (', dec_file_hash, ')...\n')
+                print('\nCheck if original file hash (', raw_file_hash, ')')
+                print('matches decrypted file hash (', dec_file_hash, ')...\n')
                 if raw_file_hash == dec_file_hash:
                     print('The hashes match! File integrity verified.')
                 else:
